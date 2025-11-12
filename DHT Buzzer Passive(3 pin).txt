@@ -1,0 +1,24 @@
+#include <DHT.h>
+
+#define DHTPIN 7
+#define DHTTYPE DHT11
+#define BUZZER 3
+#define LIMIT 20.0
+
+DHT dht(DHTPIN, DHTTYPE);
+
+void setup() {
+  Serial.begin(9600);
+  dht.begin();
+  pinMode(BUZZER, OUTPUT);
+}
+
+void loop() {
+  float t = dht.readTemperature();
+  Serial.println(isnan(t) ? "Sensor error!" : String("Temp: ") + t + " °C");
+
+  // Passive buzzer control
+  t > LIMIT ? tone(BUZZER, 1000) : noTone(BUZZER);
+
+  delay(2000);
+}
